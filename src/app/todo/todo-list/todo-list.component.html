@@ -1,0 +1,12 @@
+<mat-card *ngIf="todoList.length > 0">
+  <mat-list role="list">
+    <mat-list-item *ngFor="let todoItem of todoList">
+      <div class="list-item">
+        <div>{{ todoItem.todo }}</div>
+        <div>
+          <mat-icon class="delete" (click)="onDelete(todoItem._id)">delete</mat-icon>
+        </div>
+      </div>
+    </mat-list-item>
+  </mat-list>
+</mat-card>
