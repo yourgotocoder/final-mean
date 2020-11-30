@@ -1,25 +1,43 @@
 const route = require("express").Router();
-const { async } = require("rxjs/internal/scheduler/async");
+
 const Todo = require("../models/todo.models");
 
-route.get("/", (req, res) => {
-  //Get todo from database
+route.get("/",async (req, res) => {
+  try {
+    const foundTodo = await Todo.find();
+    res.json(foundTodo);
+  } catch (err) {
+    console.log(err)
+  }
+
 });
 
-route.get("/:id",  (req, res) => {
+
+
+route.post("/", async (req, res) => {
+  const todo = req.body.todo;
+  const todoItem = new Todo({
+    todo: todo
+  })
+  try {
+    const savedTodo = await todoItem.save();
+    res.json(savedTodo);
+  } catch (err) {
+    console.log(err);
+  }
 
 });
 
-route.post("/", (req, res) => {
-  //Post to database
-});
 
-route.put("/:id", (req, res) => {
-  //Edit item in database
-});
 
-route.delete("/:id", async (req, res) => {
-  //Delete from database
+route.delete("/:id",async (req, res) => {
+  const todoId = req.params.id
+  try {
+    const deletedItem = await Todo.deleteOne({_id: todoId});
+    res.json(deletedItem);
+  } catch (err) {
+    console.log(err)
+  }
 });
 
 module.exports = route;

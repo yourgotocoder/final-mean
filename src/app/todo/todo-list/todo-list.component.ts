@@ -9,14 +9,18 @@ import { TodoService } from '../todo.service';
 export class TodoListComponent implements OnInit {
 
   todoList = [];
-  editOn = false;
 
   constructor(private todoService: TodoService) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.todoService.getTodo();
+    this.todoService.getTodoUpdateListener().subscribe(data => {
+      this.todoList = data;
+    })
+  }
 
   onDelete(id) {
-
+    this.todoService.delete(id);
   }
 
 }

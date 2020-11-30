@@ -13,11 +13,22 @@ export class TodoService {
   constructor(private http: HttpClient) { }
 
   submit(todo: string) {
-    // Submit todo
+    const todoItem = {
+      todo: todo
+    }
+    this.http.post<any>("http://localhost:3000/api/todo", todoItem)
+      .subscribe(data => {
+        this.todo.push(data);
+        this.todoUpdtaed.next([...this.todo])
+        console.log(data);
+      })
   }
 
   getTodo() {
-    // Get todo list from
+    this.http.get<any>("http://localhost:3000/api/todo/").subscribe(data => {
+      this.todo = data;
+      this.todoUpdtaed.next([...this.todo]);
+    })
   }
 
   getTodoUpdateListener(): any {
@@ -25,7 +36,11 @@ export class TodoService {
   }
 
   delete(id) {
-    // Delete todo from backend
+    this.http.delete('http://localhost:3000/api/todo/'+ id).subscribe(data => {
+      const updatedTodo = this.todo.filter(todoItem => todoItem._id !== id);
+      this.todo = updatedTodo;
+      this.todoUpdtaed.next([...this.todo]);
+    })
   }
 
 }
